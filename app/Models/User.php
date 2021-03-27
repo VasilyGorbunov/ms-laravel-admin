@@ -39,16 +39,21 @@ use Laravel\Passport\HasApiTokens;
  */
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+  use HasApiTokens, HasFactory, Notifiable;
 
-    protected $guarded = ['id'];
+  protected $guarded = ['id'];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password',
-    ];
+  /**
+   * The attributes that should be hidden for arrays.
+   *
+   * @var array
+   */
+  protected $hidden = [
+    'password',
+  ];
+
+  public function role()
+  {
+    return $this->belongsTo(Role::class);
+  }
 }
