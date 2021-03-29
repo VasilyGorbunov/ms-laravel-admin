@@ -32,5 +32,5 @@ class Product extends Model
 {
     use HasFactory;
 
-    public $guarded =['id'];
+    protected $guarded = ['id'];
 }
