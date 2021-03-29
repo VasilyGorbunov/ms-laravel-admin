@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductCreateRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -23,26 +24,21 @@ class ProductController extends Controller
         return new ProductResource(Product::find($id));
     }
 
-    public function store(Request $request)
+    public function store(ProductCreateRequest $request)
     {
-        $file = $request->file('image');
-        $name = Str::random(10);
-
-        $url = Storage::putFileAs('images', $file, $name . '.' . $file->extension());
-
-        $product = Product::create([
-            'title' => $request->input('title'),
-            'description' => $request->input('description'),
-            'image' => env('APP_URL') . '/' . $url,
-            'price' => $request->input('price'),
-        ]);
+        $product = Product::create($request->only('title', 'description', 'image', 'price'));
 
         return response($product, Response::HTTP_CREATED);
     }
 
     public function update(Request $request, $id)
     {
-        
+        $product = Product::find($id);
+        $product->update($request->only('title', 'description', 'image', 'price'));
+
+        return response($product, Response::HTTP_CREATED);
+
+        return response($product, Response::HTTP_ACCEPTED);
     }
 
     public function destroy($id)
